@@ -4,6 +4,11 @@ import productService from './services/products'
 import ProductsList from './components/ProductsList'
 import NewProductForm from './components/NewProductForm'
 import LoginForm from './components/LoginForm'
+import {
+  BrowserRouter as Router,
+  Switch, Route, Link
+} from "react-router-dom"
+import SignUpForm from './components/SignUpForm'
 
 const App = () => {
   const [ products, setProducts ] = useState([])
@@ -40,7 +45,7 @@ const App = () => {
       return null
     }
 
-    return (
+    return ( 
       <div>
         <p>
           {user.username} logged in
@@ -59,13 +64,26 @@ const App = () => {
   }
 
   return (
-    <div>
-      <h2>Spiżarnia</h2>
-      {user === null ?
-        <LoginForm setUser={setUser} /> :
-        renderProducts()
-      }
-    </div>
+    <Router>
+      <div>
+        <Link to="/">Strona główna</Link>
+        <Link to="/sign-up">Załóż nowe konto</Link>
+      </div>
+      <div>
+        <h2>Spiżarnia</h2>
+        <Switch>
+          <Route path="/sign-up">
+            <SignUpForm />
+          </Route>
+          <Route path="/">
+            {user === null ?
+              <LoginForm setUser={setUser} /> :
+              renderProducts()
+            }
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   )
 }
 
