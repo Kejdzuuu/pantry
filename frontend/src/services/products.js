@@ -2,19 +2,29 @@ import axios from 'axios'
 
 const url = '/api/products'
 
-const getAll = () => {
-  const request = axios.get(url)
-  return request.then(response => response.data)
+const getAll = async (user) => {
+  const config = {
+    headers: {
+      Authorization: `bearer ${user.token}`
+    }
+  }
+  const response = await axios.get(url, config)
+  return response.data
 }
 
-const create = newProduct => {
-  const request =  axios.post(url, newProduct)
-  return request.then(response => response.data)
+const create = async (newProduct, user) => {
+  const config = {
+    headers: {
+      Authorization: `bearer ${user.token}`
+    }
+  }
+  const response = await axios.post(url, newProduct, config)
+  return response.data
 }
 
-const remove = id => {
-  const request = axios.delete(`${url}/${id}`)
-  return request.then(response => response.data)
+const remove = async (id) => {
+  const response = await axios.delete(`${url}/${id}`)
+  return response.data
 }
 
 const services = {

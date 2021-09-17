@@ -1,8 +1,14 @@
 const mongoose = require('mongoose')
 
 const productSchema = new mongoose.Schema({
-  name: String,
-  date: Date,
+  name: {
+    type: String,
+    required: true
+  },
+  date: {
+    type: Date,
+    required: true
+  },
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'

@@ -1,39 +1,59 @@
 const productsRouter = require('express').Router()
 const Product = require('../models/product')
+const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const { SECRET } = require('../utils/config')
 
-productsRouter.get('/', (request, response) => {
-  Product.find({}).then(products => {
-    response.json(products)
-  })
-})
+const getToken = (request) => {
+  const authorization = request.get('authorization')
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    return authorization.substring(7)
+  }
+  return null
+}
 
-productsRouter.post('/', (request, response) => {
-  const body = request.body
-  
-  if (!body.name || !body.date) {
-    return response.status(400).json({ 
-      error: 'content missing' 
+productsRouter.get('/', async (request, response) => {
+  const token = getToken(request)
+  const decodedToken = jwt.verify(token, SECRET)
+
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({
+      error: 'token missing or invalid'
     })
   }
 
-  const product = new Product({
-    name: body.name,
-    date: body.date
-  })
-
-  product.save()
-    .then(savedProduct => {
-      response.json(savedProduct)
-    })
-    .catch(error => next(error))
+  const products = await Product.find({})
+  response.json(products.filter(product => product.user.toString() === decodedToken.id))
 })
 
-productsRouter.delete('/:id', (request, response) => {
-  Product.findByIdAndRemove(request.params.id)
-    .then(() => {
-      response.status(204).end()
+productsRouter.post('/', async (request, response, next) => {
+  const body = request.body
+  const token = getToken(request)
+  const decodedToken = jwt.verify(token, SECRET)
+
+  if (!token || !decodedToken.id) {
+    return response.status(401).json({
+      error: 'token missing or invalid'
     })
-    .catch(error => next(error))
+  }
+
+  const user = await User.findById(decodedToken.id)
+
+  const product = new Product({
+    name: body.name,
+    date: body.date,
+    user: user._id
+  })
+
+  const savedProduct = await product.save()
+  user.products = user.products.concat(savedProduct._id)
+  await user.save()
+  response.json(savedProduct)
+})
+
+productsRouter.delete('/:id', async (request, response, next) => {
+  await Product.findByIdAndRemove(request.params.id)
+  response.status(204).end()
 })
 
 module.exports = productsRouter

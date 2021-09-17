@@ -4,12 +4,13 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "NODE_ENV=production node index.js",
+    "dev": "NODE_ENV=development nodemon index.js",
     "build:ui": "rm -rf build && cd ../frontend && npm run build --prod && cp -r build ../backend",
     "deploy": "git push heroku master --force",
     "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && npm run deploy",
-    "logs:prod": "heroku logs --tail"
+    "logs:prod": "heroku logs --tail",
+    "test": "NODE_ENV=test jest --verbose --runInBand"
   },
   "author": "Macq",
   "license": "MIT",
@@ -18,7 +19,15 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongoose": "^5.11.11"
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.11",
+    "mongoose-unique-validator": "^2.0.3"
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "http://localhost:3001",
+  "devDependencies": {
+    "jest": "^27.2.0",
+    "nodemon": "^2.0.12",
+    "supertest": "^6.1.6"
+  }
 }
