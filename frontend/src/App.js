@@ -11,6 +11,14 @@ const App = () => {
   const [ user, setUser ] = useState(null)
 
   useEffect(() => {
+    const loggedInUserJSON = window.localStorage.getItem('user')
+    if (loggedInUserJSON) {
+      const user = JSON.parse(loggedInUserJSON)
+      setUser(user)
+    }
+  }, [])
+
+  useEffect(() => {
     if (user !== null) {
       productService.getAll(user).then(products => {
         setProducts(products.sort((a, b) => new Date(a.date) - new Date(b.date)))
@@ -22,6 +30,11 @@ const App = () => {
     setShowAll(!showAll)
   }
 
+  const handleLogout = () => {
+    window.localStorage.removeItem('user')
+    setUser(null)
+  }
+
   const renderProducts = () => {
     if (user === null) {
       return null
@@ -29,7 +42,10 @@ const App = () => {
 
     return (
       <div>
-        <p>{user.username} logged in</p>
+        <p>
+          {user.username} logged in
+          <button onClick={handleLogout}>log out</button>
+        </p>
         <NewProductForm products={products} setProducts={setProducts} user={user} />
         <h2>Produkty</h2>
         <div>
