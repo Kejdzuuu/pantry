@@ -1,11 +1,19 @@
 import React, { useState } from "react"
 import signupService from "../services/signup"
 import { useHistory } from "react-router"
+import { Typography, TextField, Box, Button, makeStyles } from "@material-ui/core"
+
+const useStyles = makeStyles({
+  registerButton: {
+    marginTop: "10px"
+  }
+})
 
 const SignUpForm = () => {
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
   const history = useHistory()
+  const classes = useStyles()
 
   const handleSignUp = async (event) => {
     event.preventDefault()
@@ -20,17 +28,18 @@ const SignUpForm = () => {
   }
 
   return (
-    <form onSubmit={handleSignUp}>
+    <Box component="form" onSubmit={handleSignUp}>
+      <Typography variant="h4">
+        Rejestracja
+      </Typography>
       <div>
-        username
-        <input type="text" value={username} name="username" onChange={({ target }) => setUsername(target.value)} />
+        <TextField required label="login" onChange={({ target }) => setUsername(target.value)} />
       </div>
       <div>
-        password
-        <input type="password" value={password} name="password" onChange={({ target }) => setPassword(target.value)} />
+        <TextField required label="hasło" type="password" onChange={({ target }) => setPassword(target.value)} />
       </div>
-      <button type="submit">zarejestruj się</button>
-    </form>
+      <Button type="submit" variant="contained" color="secondary" className={classes.registerButton}>zarejestruj się</Button>
+    </Box>
   )
 }
 

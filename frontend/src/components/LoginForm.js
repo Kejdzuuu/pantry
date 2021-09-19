@@ -1,9 +1,17 @@
 import React, { useState } from 'react'
 import loginService from '../services/login'
+import { Typography, TextField, Box, Button, makeStyles } from "@material-ui/core"
+
+const useStyles = makeStyles({
+  loginButton: {
+    marginTop: "10px"
+  }
+})
 
 const LoginForm = ({ setUser }) => {
   const [ username, setUsername ] = useState('')
   const [ password, setPassword ] = useState('')
+  const classes = useStyles()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -21,17 +29,18 @@ const LoginForm = ({ setUser }) => {
   }
 
   return (
-    <form onSubmit={handleLogin}>
+    <Box component="form" onSubmit={handleLogin}>
+      <Typography variant="h4">
+        Logowanie
+      </Typography>
       <div>
-        username
-        <input type="text" value={username} name="username" onChange={({ target }) => setUsername(target.value)} />
+        <TextField required label="login" value={username} onChange={({ target }) => setUsername(target.value)} />
       </div>
       <div>
-        password
-        <input type="password" value={password} name="password" onChange={({ target }) => setPassword(target.value)} />
+        <TextField required label="hasło" type="password" value={password} onChange={({ target }) => setPassword(target.value)} />
       </div>
-      <button type="submit">login</button>
-    </form>
+      <Button type="submit" variant="contained" color="secondary" className={classes.loginButton}>zaloguj się</Button>
+    </Box>
   )
 }
 

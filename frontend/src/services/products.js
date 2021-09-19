@@ -22,8 +22,13 @@ const create = async (newProduct, user) => {
   return response.data
 }
 
-const remove = async (id) => {
-  const response = await axios.delete(`${url}/${id}`)
+const remove = async (id, user) => {
+  const config = {
+    headers: {
+      Authorization: `bearer ${user.token}`
+    }
+  }
+  const response = await axios.delete(`${url}/${id}`, config)
   return response.data
 }
 
