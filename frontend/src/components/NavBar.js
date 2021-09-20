@@ -1,5 +1,6 @@
 import React from "react"
-import { AppBar, Toolbar, Button, Box, Typography, Divider, makeStyles } from '@material-ui/core'
+import { AppBar, Toolbar, Button, Box, Typography, Divider } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 import {
   Switch, Route, Link
 } from "react-router-dom"
@@ -21,9 +22,8 @@ const NavBar = ({ user, setUser }) => {
   const UserLoggedInComponent = () => {
     return (
       <>
-        <Box sx={{ flexGrow: 1 }} />
-        <Typography variant="body2" component="div" sx={{ flexGrow: 1 }}>zalogowany jako {user.username}</Typography>
-        <Divider orientation="vertical" variant="middle" flexItem />
+        <Typography variant="body2" component="div">zalogowany jako {user.username}</Typography>
+        <Divider orientation="vertical" variant="middle" flexItem sx={{ padding: "5px" }}/>
         <Button color="inherit" onClick={handleLogout}>wyloguj</Button>
       </>
     )
@@ -32,7 +32,6 @@ const NavBar = ({ user, setUser }) => {
   const UserNotLoggedInComponent = () => {
     return (
       <>
-        <Box sx={{ flexGrow: 1 }} />
         <Switch>
           <Route path="/sign-up">
             <Button color="inherit" component={Link} to="/">Zaloguj się</Button>

@@ -1,7 +1,7 @@
 import React from 'react'
 import Product from './Product'
 import productService from '../services/products'
-import { List } from '@material-ui/core'
+import { List } from '@mui/material'
 
 const ProductsList = ({ products, setProducts, showAll, user }) => {
   const productsToShow = showAll

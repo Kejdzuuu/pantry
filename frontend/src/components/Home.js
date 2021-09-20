@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react"
 import NewProductForm from "./NewProductForm"
 import ProductsList from "./ProductsList"
 import productService from '../services/products'
-import { Typography, Button, makeStyles } from '@material-ui/core'
+import { Typography, Button } from '@mui/material'
+import { makeStyles } from '@mui/styles'
 
 const useStyles = makeStyles({
   productsHeader: {

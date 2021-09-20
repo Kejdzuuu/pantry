@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import "react-datepicker/dist/react-datepicker.css"
 import LoginForm from './components/LoginForm'
 import Home from './components/Home'
 import SignUpForm from './components/SignUpForm'
@@ -8,7 +7,7 @@ import {
   BrowserRouter as Router,
   Switch, Route
 } from "react-router-dom"
-import { Container } from '@material-ui/core'
+import { Container } from '@mui/material'
 
 const App = () => {
   const [ user, setUser ] = useState(null)
@@ -22,7 +21,7 @@ const App = () => {
   }, [])
 
   return (
-    <Container>
+    <Container maxWidth="false" disableGutters={true}>
       <Router>
         <NavBar user={user} setUser={setUser} />
         <Container maxWidth="sm">

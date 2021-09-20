@@ -1,15 +1,20 @@
-import React, { useState, forwardRef } from 'react'
-import DatePicker, { registerLocale } from "react-datepicker"
-import pl from 'date-fns/locale/pl'
+import React, { useState } from 'react'
 import productService from '../services/products'
-import { Typography, TextField, Box, Button, makeStyles } from "@material-ui/core"
-
-registerLocale('pl', pl)
+import { Typography, TextField, Box, Button } from "@mui/material"
+import { makeStyles } from '@mui/styles'
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import DatePicker from '@mui/lab/DatePicker';
 
 const useStyles = makeStyles({
-  productInput: {
-    marginTop: "10px",
-    marginBottom: "10px"
+  productButton: {
+    marginTop: "10px"
+  },
+  textField: {
+    marginTop: "10px"
+  },
+  productFormBox: {
+    marginBottom: "50px"
   }
 })
 
@@ -34,20 +39,28 @@ const NewProductForm = ({ products, setProducts, user }) => {
     })
   }
 
-  const MaterialDatePicker = forwardRef(({ value, onClick }, ref) => (
-    <TextField variant="outlined" label="data ważności" value={value} onClick={onClick} ref={ref} />
-  ));
-
   return (
-    <Box component="form" onSubmit={addProduct}>
+    <Box component="form" className={classes.productFormBox} onSubmit={addProduct}>
       <Typography variant="h4">
         Dodawanie produktu
       </Typography>
-      <div className={classes.productInput}>
-        <TextField variant="outlined" label="nazwa produktu" value={newProduct} onChange={handleProductChange} />
-        <DatePicker locale="pl" selected={newDate} onChange={date => setNewDate(date)} customInput={<MaterialDatePicker />} />
+      <div>
+        <TextField required variant="outlined" label="nazwa produktu" value={newProduct} className={classes.textField} onChange={handleProductChange} />
+        <LocalizationProvider dateAdapter={AdapterDateFns}>
+          <DatePicker
+            required
+            disablePast
+            label="data ważności"
+            openTo="day"
+            value={newDate}
+            onChange={(newValue) => {
+              setNewDate(newValue);
+            }}
+            renderInput={(params) => <TextField {...params} className={classes.textField} />}
+          />
+        </LocalizationProvider>
       </div>
-      <Button variant="contained" color="secondary" type="submit">dodaj produkt</Button>
+      <Button variant="contained" color="secondary" type="submit" className={classes.productButton}>dodaj produkt</Button>
     </Box>
   )
 }
